@@ -13,7 +13,7 @@ dependencies = [
     "pandas>=3.0.6",
     "scikit-learn>=1.9.1",
     "scipy>=1.18.1",
-    "torch>=2.14.1",
+    "torch==2.11.0",
 ]
 
 [dependency-groups]
@@ -24,6 +24,14 @@ dev = [
     "pytest>=9.1.1",
     "ruff>=0.17.1",
 ]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cu128" }
+
+[[tool.uv.index]]
+name = "pytorch-cu128"
+url = "https://download.pytorch.org/whl/cu128"
+explicit = true
 
 [tool.ruff]
 line-length = 80

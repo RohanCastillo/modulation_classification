@@ -55,6 +55,11 @@ Kurt, "HisarMod: A new challenging modulated signals dataset," IEEE Dataport,
 uv sync
 ```
 
+PyTorch is pinned to 2.11.0 from the explicit CUDA 12.8 package index to
+support Amarel's NVIDIA 570 driver. Other packages use PyPI. After pulling
+dependency updates on Amarel, run `uv sync --frozen` before submitting a job;
+the batch job uses the existing environment without syncing it.
+
 ## Usage
 
 Convert the dataset on Amarel. Copy the extracted CSVs to
