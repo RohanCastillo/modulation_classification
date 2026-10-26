@@ -1,0 +1,40 @@
+[project]
+name = "modulation-classifier"
+version = "0.1.0"
+description = "Classify radio modulation types from raw IQ samples (HisarMod2019.1) with a cumulant baseline and a 1D CNN."
+readme = "README.md"
+authors = [
+    { name = "RohanCastillo", email = "rohanskastillo@gmail.com" }
+]
+requires-python = ">=3.13"
+dependencies = [
+    "matplotlib>=3.11.2",
+    "numpy>=2.5.4",
+    "pandas>=3.0.6",
+    "scikit-learn>=1.9.1",
+    "scipy>=1.18.1",
+    "torch>=2.14.1",
+]
+
+[dependency-groups]
+dev = [
+    "ipykernel>=7.4.0",
+    "mypy>=2.4.0",
+    "pandas-stubs>=3.0.5.260914",
+    "pytest>=9.1.1",
+    "ruff>=0.17.1",
+]
+
+[tool.ruff]
+line-length = 80
+target-version = "py313"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP"]
+
+[tool.mypy]
+check_untyped_defs = true
+
+[[tool.mypy.overrides]]
+module = ["scipy.*", "sklearn.*"]
+ignore_missing_imports = true
