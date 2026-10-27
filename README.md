@@ -102,6 +102,10 @@ explanations beside each step. Section 9 adds the CNN training loop with Adam, v
 stopping, and restoration of the best checkpoint. Running the execution cell starts training; Run All does too. The feature baseline, comparison plots, and final evaluation remain
 planned in the notebook and [plan.md](plan.md).
 
+The first CNN block preserves all 1,024 time samples; the remaining three
+blocks use max pooling to reduce the length to 512, 256, and 128. The
+classifier retains dropout at 0.3 for this pooling experiment.
+
 After conversion on Amarel, configure `training_params = TrainingParameters(...)`
 and run the notebook in order. Set `data_dir` to the converted arrays. Training uses only the authors' training set
 with the fixed 80/20 split and selects CUDA when available. Initial settings
