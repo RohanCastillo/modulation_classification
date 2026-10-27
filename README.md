@@ -137,16 +137,42 @@ uv run python -m ipykernel install --user \
 Open the notebook in an Amarel Jupyter compute session and choose
 **Modulation Classifier**. The session must be able to access the project
 and its environment. Use the repository root as the working directory for
-relative data paths. Request a GPU allocation when CNN training is added;
+relative data paths. Request a GPU allocation for CNN training;
 do not train on a login node. See the
 [Amarel Open OnDemand guide](https://user-guide-f4258a.gitlab.io/connect/open-ondemand/)
 for cluster access. Available interactive apps and GPU choices depend on
 Amarel's current configuration.
 
-Unattended notebook execution through Slurm remains planned.
-It will require a notebook execution tool such as `nbconvert`, which is not
-currently a project dependency. No training job or new dependency is added
-for this training loop.
+For full batch training, run these commands on the login node from the
+repository root after conversion:
+
+```bash
+uv sync --frozen
+mkdir -p runs models
+sbatch scripts/run_notebook.slurm
+```
+
+The job requests one GPU, four CPU cores, 16 GB RAM, and a 12-hour time
+limit (not an estimated runtime). It checks CUDA availability before running
+the notebook's ordinary Python code cells in order, using the existing uv
+environment without installing packages on the compute node. No notebook
+execution dependency is needed. Notebook magics and shell commands are not
+supported by this runner. It does not save an executed notebook; metrics,
+weights, and figures are saved by the existing notebook cells.
+
+Settings remain in `TrainingParameters`: by default, up to 50 epochs with
+patience 5, using all converted training data and the fixed validation split.
+For a short batch run, point `data_dir` at a prepared real-data subset and
+reduce `epochs` before submission. Test data is not evaluated.
+
+Follow progress with `tail -f runs/train_cnn_JOBID.out`, substituting the
+submitted job ID. Successful execution ends with
+`Training and validation reporting complete.` Check Slurm completion with
+`sacct -j JOBID --format=JobID,State,ExitCode,Elapsed`.
+Figures use a noninteractive backend. Existing output files are overwritten;
+archive them before another run and do not run concurrent jobs in this checkout.
+If the time limit is reached, the best weights remain saved, but history and
+final reporting may be missing; the checkpoint cannot resume optimizer state.
 
 ### Development checks
 
@@ -202,6 +228,7 @@ modulation_classification.ipynb  # explanations and current implementations
 scripts/
     convert_hisarmod.py          # one-time CSV-to-.npy conversion
     convert_hisarmod.slurm       # conversion job on Amarel
+    run_notebook.slurm           # full CNN training and validation GPU job
 pyproject.toml                  # uv dependencies and tool configuration
 uv.lock                         # reproducible dependency versions
 plan.md                         # remaining experiments and deliverables
