@@ -97,7 +97,7 @@ VS Code and select this project's `.venv/bin/python` as its kernel after
 running `uv sync`. Restart the kernel and run cells from top to bottom.
 
 The notebook contains the existing loading, power normalization, stratified
-split, label mappings, accuracy-by-SNR helper, and CNN definition, with
+split, label mappings, accuracy-by-SNR helper, and CNN definition (channels 32 → 64 → 128 → 256), with
 explanations beside each step. Section 9 adds the CNN training loop with Adam, validation loss, early
 stopping, and restoration of the best checkpoint. Running the execution cell starts training; Run All does too. The feature baseline, comparison plots, and final evaluation remain
 planned in the notebook and [plan.md](plan.md).
