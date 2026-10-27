@@ -109,7 +109,7 @@ classifier retains dropout at 0.3 for this pooling experiment.
 After conversion on Amarel, configure `training_params = TrainingParameters(...)`
 and run the notebook in order. Set `data_dir` to the converted arrays. Training uses only the authors' training set
 with the fixed 80/20 split and selects CUDA when available. Initial settings
-are 100 epochs with patience 10. For a short run, use a prepared real-data
+are 100 epochs with patience 12. For a short run, use a prepared real-data
 subset and reduce `training_params.epochs`; synthetic smoke mode has been removed.
 
 Section 9 follows three functions: `run_training_epoch` updates weights,
@@ -117,6 +117,11 @@ Section 9 follows three functions: `run_training_epoch` updates weights,
 stopping, and best-weight restoration. A short execution cell starts training;
 settings and JSON result saving are separate. The notebook writes settings and
 losses under `runs/` and its best weights to `models/best.pt`.
+After each validation pass, `ReduceLROnPlateau` monitors validation loss and
+halves the learning rate after more than four consecutive epochs without
+sufficient improvement, down to `1e-6`. Its factor, patience, and minimum
+learning rate live in `TrainingParameters` and are saved in `runs/config.json`.
+Early stopping uses a separate patience of 12 epochs.
 The loop saves improvements based on validation loss and reloads the best
 weights afterward. Epoch history is written after training returns; interrupted
 runs retain their best checkpoint but may lose unsaved history. Checkpoints do not include optimizer state for resuming.
@@ -165,7 +170,7 @@ supported by this runner. It does not save an executed notebook; metrics,
 weights, and figures are saved by the existing notebook cells.
 
 Settings remain in `TrainingParameters`: by default, up to 100 epochs with
-patience 10, using all converted training data and the fixed validation split.
+patience 12, using all converted training data and the fixed validation split.
 For a short batch run, point `data_dir` at a prepared real-data subset and
 reduce `epochs` before submission. Test data is not evaluated.
 
