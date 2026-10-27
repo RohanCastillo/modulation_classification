@@ -109,7 +109,7 @@ classifier retains dropout at 0.3 for this pooling experiment.
 After conversion on Amarel, configure `training_params = TrainingParameters(...)`
 and run the notebook in order. Set `data_dir` to the converted arrays. Training uses only the authors' training set
 with the fixed 80/20 split and selects CUDA when available. Initial settings
-are 50 epochs with patience 5. For a short run, use a prepared real-data
+are 100 epochs with patience 10. For a short run, use a prepared real-data
 subset and reduce `training_params.epochs`; synthetic smoke mode has been removed.
 
 Section 9 follows three functions: `run_training_epoch` updates weights,
@@ -164,8 +164,8 @@ execution dependency is needed. Notebook magics and shell commands are not
 supported by this runner. It does not save an executed notebook; metrics,
 weights, and figures are saved by the existing notebook cells.
 
-Settings remain in `TrainingParameters`: by default, up to 50 epochs with
-patience 5, using all converted training data and the fixed validation split.
+Settings remain in `TrainingParameters`: by default, up to 100 epochs with
+patience 10, using all converted training data and the fixed validation split.
 For a short batch run, point `data_dir` at a prepared real-data subset and
 reduce `epochs` before submission. Test data is not evaluated.
 
